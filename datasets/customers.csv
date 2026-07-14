@@ -1,0 +1,4 @@
+customer_id,name,email,city
+1,Alice Johnson,alice@example.com,New York
+2,Bob Smith,bob@example.com,London
+3,Carol Davis,carol@example.com,Paris

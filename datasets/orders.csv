@@ -1,0 +1,4 @@
+order_id,customer_id,product_id,quantity,total
+101,1,501,2,49.98
+102,2,502,1,19.99
+103,3,503,3,89.97
