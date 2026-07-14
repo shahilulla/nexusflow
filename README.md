@@ -1,14 +1,27 @@
-6 # NexusFlow
+# NexusFlow
 
-A starter project structure for NexusFlow with backend, frontend, infrastructure, docs, scripts, datasets, tests, and CI configuration.
+Production-Grade Open Source Data Platform for Modern Data Engineering.
 
-## Structure
+## Tech Stack
 
-- backend/
-- frontend/
-- infrastructure/
-- docs/
-- scripts/
-- datasets/
-- tests/
-- .github/
+- Python 3.12
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+- Alembic
+- Docker
+
+## Project Structure
+
+```
+backend/
+frontend/
+infrastructure/
+docs/
+scripts/
+datasets/
+```
+
+## Status
+
+🚧 Under Development
