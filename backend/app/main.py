@@ -10,6 +10,7 @@ from app.api.pipelines import router as pipelines_router
 from app.core.config import settings
 from app.core.logger import get_logger
 from app.exceptions import register_exception_handlers
+from app.middleware import logging_middleware
 from app.utils.constants import SEPARATOR
 
 logger = get_logger(__name__)
@@ -44,6 +45,9 @@ app = FastAPI(
 
 # Register Global Exception Handlers
 register_exception_handlers(app)
+
+# Register Request Logging Middleware
+app.middleware("http")(logging_middleware)
 
 # Register API Routers
 app.include_router(health_router)
