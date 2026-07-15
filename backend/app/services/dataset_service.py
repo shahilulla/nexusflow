@@ -2,7 +2,10 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.exceptions import DatasetNotFoundException
+from app.exceptions import (
+    DatasetAlreadyExistsException,
+    DatasetNotFoundException,
+)
 from app.repositories.dataset_repository import DatasetRepository
 from app.schemas.dataset import DatasetCreate, DatasetUpdate
 
@@ -12,6 +15,11 @@ class DatasetService:
         self.repository = DatasetRepository(db)
 
     def create_dataset(self, dataset: DatasetCreate):
+        existing = self.repository.get_by_name(dataset.name)
+
+        if existing:
+            raise DatasetAlreadyExistsException(dataset.name)
+
         return self.repository.create(dataset)
 
     def get_datasets(self):

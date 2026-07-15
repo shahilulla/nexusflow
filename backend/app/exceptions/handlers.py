@@ -3,7 +3,10 @@ from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.exceptions.custom_exceptions import DatasetNotFoundException
+from app.exceptions.custom_exceptions import (
+    DatasetAlreadyExistsException,
+    DatasetNotFoundException,
+)
 
 
 def register_exception_handlers(app: FastAPI):
@@ -19,6 +22,23 @@ def register_exception_handlers(app: FastAPI):
                 "success": False,
                 "error": {
                     "code": 404,
+                    "message": exc.message,
+                },
+                "timestamp": datetime.utcnow().isoformat(),
+            },
+        )
+
+    @app.exception_handler(DatasetAlreadyExistsException)
+    async def dataset_exists_handler(
+        request: Request,
+        exc: DatasetAlreadyExistsException,
+    ):
+        return JSONResponse(
+            status_code=409,
+            content={
+                "success": False,
+                "error": {
+                    "code": 409,
                     "message": exc.message,
                 },
                 "timestamp": datetime.utcnow().isoformat(),

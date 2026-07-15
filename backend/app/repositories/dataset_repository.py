@@ -10,7 +10,7 @@ class DatasetRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, dataset: DatasetCreate) -> Dataset:
+    def create(self, dataset: DatasetCreate):
         db_dataset = Dataset(**dataset.model_dump())
 
         self.db.add(db_dataset)
@@ -19,13 +19,20 @@ class DatasetRepository:
 
         return db_dataset
 
-    def get_all(self) -> list[Dataset]:
+    def get_all(self):
         return self.db.query(Dataset).all()
 
-    def get_by_id(self, dataset_id: UUID) -> Dataset | None:
+    def get_by_id(self, dataset_id: UUID):
         return (
             self.db.query(Dataset)
             .filter(Dataset.id == dataset_id)
+            .first()
+        )
+
+    def get_by_name(self, name: str):
+        return (
+            self.db.query(Dataset)
+            .filter(Dataset.name == name)
             .first()
         )
 
@@ -33,8 +40,7 @@ class DatasetRepository:
         self,
         db_dataset: Dataset,
         dataset: DatasetUpdate,
-    ) -> Dataset:
-
+    ):
         update_data = dataset.model_dump(exclude_unset=True)
 
         for key, value in update_data.items():
@@ -45,6 +51,6 @@ class DatasetRepository:
 
         return db_dataset
 
-    def delete(self, db_dataset: Dataset) -> None:
+    def delete(self, db_dataset: Dataset):
         self.db.delete(db_dataset)
         self.db.commit()
