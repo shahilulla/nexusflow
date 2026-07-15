@@ -1,9 +1,8 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 
-from app.db.database import get_db
+from app.dependencies import get_dataset_service
 from app.schemas.dataset import (
     DatasetCreate,
     DatasetResponse,
@@ -24,9 +23,8 @@ router = APIRouter(
 )
 def create_dataset(
     dataset: DatasetCreate,
-    db: Session = Depends(get_db),
+    service: DatasetService = Depends(get_dataset_service),
 ):
-    service = DatasetService(db)
     return service.create_dataset(dataset)
 
 
@@ -35,9 +33,8 @@ def create_dataset(
     response_model=list[DatasetResponse],
 )
 def get_all_datasets(
-    db: Session = Depends(get_db),
+    service: DatasetService = Depends(get_dataset_service),
 ):
-    service = DatasetService(db)
     return service.get_datasets()
 
 
@@ -47,10 +44,8 @@ def get_all_datasets(
 )
 def get_dataset(
     dataset_id: UUID,
-    db: Session = Depends(get_db),
+    service: DatasetService = Depends(get_dataset_service),
 ):
-    service = DatasetService(db)
-
     dataset = service.get_dataset(dataset_id)
 
     if dataset is None:
@@ -69,10 +64,8 @@ def get_dataset(
 def update_dataset(
     dataset_id: UUID,
     dataset: DatasetUpdate,
-    db: Session = Depends(get_db),
+    service: DatasetService = Depends(get_dataset_service),
 ):
-    service = DatasetService(db)
-
     updated = service.update_dataset(dataset_id, dataset)
 
     if updated is None:
@@ -90,10 +83,8 @@ def update_dataset(
 )
 def delete_dataset(
     dataset_id: UUID,
-    db: Session = Depends(get_db),
+    service: DatasetService = Depends(get_dataset_service),
 ):
-    service = DatasetService(db)
-
     deleted = service.delete_dataset(dataset_id)
 
     if not deleted:
