@@ -9,25 +9,26 @@ from app.api.monitoring import router as monitoring_router
 from app.api.pipelines import router as pipelines_router
 from app.core.config import settings
 from app.core.logger import get_logger
+from app.utils.constants import SEPARATOR
 
 logger = get_logger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("=" * 60)
+    logger.info(SEPARATOR)
     logger.info("Starting NexusFlow Backend...")
     logger.info(f"Application : {settings.APP_NAME}")
     logger.info(f"Version     : {settings.APP_VERSION}")
     logger.info(f"API Prefix  : {settings.API_PREFIX}")
     logger.info("Backend started successfully.")
-    logger.info("=" * 60)
+    logger.info(SEPARATOR)
 
     yield
 
-    logger.info("=" * 60)
+    logger.info(SEPARATOR)
     logger.info("Shutting down NexusFlow Backend...")
-    logger.info("=" * 60)
+    logger.info(SEPARATOR)
 
 
 app = FastAPI(
@@ -35,6 +36,9 @@ app = FastAPI(
     description="Production-Grade Data Platform",
     version=settings.APP_VERSION,
     lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
 
 # Register API Routers
@@ -55,6 +59,7 @@ async def root():
         "status": "running",
         "message": "Welcome to NexusFlow!",
         "docs": "/docs",
+        "redoc": "/redoc",
         "openapi": "/openapi.json",
         "health": "/health",
     }
