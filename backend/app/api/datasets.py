@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 
 from app.dependencies import get_dataset_service
 from app.schemas.dataset import (
@@ -46,15 +46,7 @@ def get_dataset(
     dataset_id: UUID,
     service: DatasetService = Depends(get_dataset_service),
 ):
-    dataset = service.get_dataset(dataset_id)
-
-    if dataset is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Dataset not found",
-        )
-
-    return dataset
+    return service.get_dataset(dataset_id)
 
 
 @router.put(
@@ -66,15 +58,7 @@ def update_dataset(
     dataset: DatasetUpdate,
     service: DatasetService = Depends(get_dataset_service),
 ):
-    updated = service.update_dataset(dataset_id, dataset)
-
-    if updated is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Dataset not found",
-        )
-
-    return updated
+    return service.update_dataset(dataset_id, dataset)
 
 
 @router.delete(
@@ -85,14 +69,4 @@ def delete_dataset(
     dataset_id: UUID,
     service: DatasetService = Depends(get_dataset_service),
 ):
-    deleted = service.delete_dataset(dataset_id)
-
-    if not deleted:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Dataset not found",
-        )
-
-    return {
-        "message": "Dataset deleted successfully"
-    }
+    return service.delete_dataset(dataset_id)
