@@ -8,6 +8,7 @@ from app.exceptions import (
 )
 from app.repositories.dataset_repository import DatasetRepository
 from app.schemas.dataset import DatasetCreate, DatasetUpdate
+from app.schemas.pagination import PageResponse
 
 
 class DatasetService:
@@ -22,8 +23,32 @@ class DatasetService:
 
         return self.repository.create(dataset)
 
-    def get_datasets(self):
-        return self.repository.get_all()
+    def get_datasets(
+        self,
+        page: int,
+        size: int,
+        search: str | None = None,
+        status: str | None = None,
+        owner: str | None = None,
+        source_type: str | None = None,
+        sort: str | None = None,
+    ):
+        items, total = self.repository.get_all(
+            page=page,
+            size=size,
+            search=search,
+            status=status,
+            owner=owner,
+            source_type=source_type,
+            sort=sort,
+        )
+
+        return PageResponse.create(
+            items=items,
+            total=total,
+            page=page,
+            size=size,
+        )
 
     def get_dataset(self, dataset_id: UUID):
         dataset = self.repository.get_by_id(dataset_id)
